@@ -1,0 +1,114 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 100 // Maximum number of cities
+int adjMatrix[MAX][MAX]; // Adjacency matrix for the graph
+int visited[MAX]; // Array to track visited nodes
+
+// Function to create a graph using adjacency matrix
+void createGraph(int n) {
+int i, j;
+printf("Enter the adjacency matrix (0 for no edge, 1 for edge):\n");
+for (i = 0; i < n; i++) {
+for (j = 0; j < n; j++) {
+scanf("%d", &adjMatrix[i][j]);
+}
+}
+printf("Graph created successfully!\n");
+}
+
+// Depth First Search (DFS)
+void dfs(int start, int n) {
+printf("%d ", start);
+visited[start] = 1;
+
+for (int i = 0; i < n; i++) {
+if (adjMatrix[start][i] == 1 && !visited[i]) {
+dfs(i, n);
+}
+}
+}
+
+// Breadth First Search (BFS)
+void bfs(int start, int n) {
+int queue[MAX], front = -1, rear = -1;
+int i;
+
+// Initialize visited array
+for (i = 0; i < n; i++) {
+visited[i] = 0;
+}
+
+// Add the starting node to the queue
+queue[++rear] = start;
+visited[start] = 1;
+
+printf("%d ", start);
+
+while (front != rear) {
+// Remove the front node from the queue
+int current = queue[++front];
+
+// Enqueue all unvisited adjacent nodes
+for (i = 0; i < n; i++) {
+if (adjMatrix[current][i] == 1 && !visited[i]) {
+queue[++rear] = i;
+visited[i] = 1;
+printf("%d ", i);
+}
+}
+}
+}
+
+// Main Function: Menu-driven program
+int main() {
+int n, choice, start;
+
+printf("Enter the number of cities (nodes): ");
+scanf("%d", &n);
+
+while (1) {
+printf("\n--- Menu ---\n");
+printf("1. Create Graph\n");
+printf("2. DFS Traversal\n");
+printf("3. BFS Traversal\n");
+printf("4. Exit\n");
+printf("Enter your choice: ");
+scanf("%d", &choice);
+
+switch (choice) {
+case 1:
+createGraph(n);
+break;
+
+case 2:
+printf("Enter the starting node for DFS: ");
+scanf("%d", &start);
+// Initialize visited array
+for (int i = 0; i < n; i++) {
+visited[i] = 0;
+}
+printf("Nodes reachable using DFS: ");
+dfs(start, n);
+printf("\n");
+break;
+
+case 3:
+printf("Enter the starting node for BFS: ");
+scanf("%d", &start);
+printf("Nodes reachable using BFS: ");
+bfs(start, n);
+printf("\n");
+break;
+
+case 4:
+printf("Exiting program.\n");
+exit(0);
+
+default:
+printf("Invalid choice. Please try again.\n");
+}
+}
+
+return 0;
+}
