@@ -1,0 +1,128 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+	int data;
+	struct Node *left, *right;
+} Node;
+
+struct Node* createNode(int value) {
+	struct Node* newNode = (struct Node*)malloc(sizeof(Node));
+	newNode->data = value;
+	newNode->left = newNode->right = NULL;
+	return newNode;
+}
+
+struct Node* insert(struct Node* root, int data) {
+	if (root == NULL) {
+		return createNode(data);
+	}
+
+	if (data < root->data) {
+		root->left = insert(root->left, data);
+	} else if (data > root->data) {
+		root->right = insert(root->right, data);
+	}
+	return root;
+}
+
+void inorderTraversal(struct Node* root) {
+	if (root != NULL) {
+		inorderTraversal(root->left);
+		printf("%d ", root->data);
+		inorderTraversal(root->right);
+	}
+}
+
+void preorderTraversal(struct Node* root) {
+	if (root != NULL) {
+		printf("%d ", root->data);
+		preorderTraversal(root->left);
+		preorderTraversal(root->right);
+	}
+}
+
+void postorderTraversal(struct Node* root) {
+	if (root != NULL) {
+		postorderTraversal(root->left);
+		postorderTraversal(root->right);
+		printf("%d ", root->data);
+	}
+}
+
+struct Node* search(struct Node* root, int key) {
+	if (root == NULL || root->data == key) {
+		return root;
+	}
+
+	if (key < root->data) {
+		return search(root->left, key);
+	}
+
+	return search(root->right, key); 
+}
+
+int main() {
+	struct Node* root = NULL;
+	int choice, n, key, i;
+	int elements[] = {6, 9, 5, 2, 8, 15, 24, 14, 7, 8, 5, 2};
+
+	while (1) {
+		printf("\n--- Menu ---\n");
+		printf("1. Create BST\n");
+		printf("2. Traverse BST (Inorder, Preorder, Postorder)\n");
+		printf("3. Search in BST\n");
+		printf("4. Exit\n");
+		printf("Enter your choice: ");
+		scanf("%d", &choice);
+
+		switch (choice) {
+		case 1:
+			root = NULL; 
+			n = sizeof(elements) / sizeof(elements[0]);
+			for (i = 0; i < n; i++) {
+				root = insert(root, elements[i]);
+			}
+			printf("BST created with the given elements.\n");
+			break;
+
+		case 2:
+			if (root == NULL) {
+				printf("BST is empty. Create a BST first.\n");
+			} else {
+				printf("Inorder Traversal: ");
+				inorderTraversal(root);
+				printf("\nPreorder Traversal: ");
+				preorderTraversal(root);
+				printf("\nPostorder Traversal: ");
+				postorderTraversal(root);
+				printf("\n");
+			}
+			break;
+
+		case 3:
+			if (root == NULL) {
+				printf("BST is empty. Create a BST first.\n");
+			} else {
+				printf("Enter the element to search: ");
+				scanf("%d", &key);
+				struct Node* result = search(root, key);
+				if (result != NULL) {
+					printf("Element %d found in the BST.\n", key);
+				} else {
+					printf("Element %d not found in the BST.\n", key);
+				}
+			}
+			break;
+
+		case 4:
+			printf("Exiting program.\n");
+			exit(0);
+
+		default:
+			printf("Invalid choice. Please try again.\n");
+		}
+	}
+
+	return 0;
+}
