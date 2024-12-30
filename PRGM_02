@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX 100
+
+char STR[MAX], PAT[MAX], REP[MAX], ANS[MAX];
+
+void read() {
+    printf("Enter the MAIN string: \n");
+    fgets(STR, MAX, stdin);
+    STR[strcspn(STR, "\n")] = 0;
+
+    printf("Enter a PATTERN string: \n");
+    fgets(PAT, MAX, stdin);
+    PAT[strcspn(PAT, "\n")] = 0;
+
+    printf("Enter a REPLACE string: \n");
+    fgets(REP, MAX, stdin);
+    REP[strcspn(REP, "\n")] = 0;
+}
+
+void replace() {
+    int s = 0, p = 0, a = 0;
+    int patLen = strlen(PAT); 
+
+    while (STR[s] != '\0') {
+        if (STR[s] == PAT[p]) {
+            p++;
+            s++;
+            if (p == patLen) {
+                for (int i = 0; REP[i] != '\0'; i++, a++) {
+                    ANS[a] = REP[i];
+                }
+                p = 0; 
+                continue;
+            }
+        } else {
+            ANS[a] = STR[s];
+            a++;
+            s++;
+            p = 0; 
+        }
+    }
+
+    ANS[a] = '\0'; 
+}
+
+void display() {
+    if (strlen(ANS) == 0) {
+        printf("Pattern doesn't found!!!\n");
+    } else {
+        printf("\nThe RESULTANT string is:\n%s\n", ANS);
+    }
+}
+
+int main() {
+    read();
+    replace();
+    display();
+    return 0;
+}
